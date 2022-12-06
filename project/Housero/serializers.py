@@ -1,7 +1,7 @@
 # from django.contrib.auth.models import User, Group
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Criteria
 
 class UserSerializer(serializers.ModelSerializer):
     
@@ -21,6 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
         fields = ('email', 'username', 'password', 'first_name', 'last_name')
         extra_kwargs = {'password': {'write_only': True}}
+        depth=1
     
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -41,3 +42,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['first_name'] = user.first_name
         return token
+
+class CriteriaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Criteria
+        fields = '__all__'

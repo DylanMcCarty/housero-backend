@@ -19,5 +19,5 @@ class Criteria(models.Model):
     sqft = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return str(self.user_id) + ' ' + str(beds) + ' ' + str(baths) + ' ' + str(min_price) + str(max_price) + ' ' + str(sqft)
+        return str(self.user_id) + ' ' + str(self.beds) + ' ' + str(self.baths) + ' ' + str(self.min_price) + ' ' + str(self.max_price) + ' ' + str(self.sqft)
         
