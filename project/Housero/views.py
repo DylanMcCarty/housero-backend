@@ -2,15 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import CustomUser, Criteria
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, permissions, status
 from Housero.serializers import UserSerializer, MyTokenObtainPairSerializer, CriteriaSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
-from rest_framework import status
 from .models import Criteria
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 
@@ -51,38 +50,44 @@ class CustomUserCreate(APIView):
 
 
 
-class CriteriaAPIView(APIView):
+class CriteriaAPIView(viewsets.ModelViewSet):
+    queryset = Criteria.objects.all()
+    serializer_class = CriteriaSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user_id']
 
-    def get_object(self, pk):
-        try:
-            return Criteria.objects.get(pk=pk)
-        except Criteria.DoesNotExist:
-            raise Http404
 
-    def get(self, request, pk=None, format=None):
-        if pk:
-            data = self.get_object(pk)
-            serializer = CriteriaSerializer(data)
+    # def get_object(self, pk):
+    #     try:
+    #         return  Criteria.objects.get(pk=pk)
+    #     except Criteria.DoesNotExist:
+    #         raise Http404
+
+    # def get(self, request, pk=None, format=None):
+    #     if pk:
+    #         data = self.get_object(pk)
+    #         serializer = CriteriaSerializer(data)
         
-        else:
-            data = Criteria.objects.all()
-            serializer = CriteriaSerializer(data, many=True)
-        return Response(serializer.data)
+    #     else:
+    #         data = Criteria.objects.all()
+    #         serializer = CriteriaSerializer(data, many=True)
+    #     return Response(serializer.data)
 
-    def put(self, request, pk=None, format=None):
-        criteria_to_update = Criteria.objects.get(pk=pk)
-        data = request.data
-        serializer = CriteriaSerializer(instance=criteria_to_update, data=data, partial=True) 
+    # def put(self, request, pk=None, format=None):
+    #     criteria_to_update = Criteria.objects.get(pk=pk)
+    #     data = request.data
+    #     serializer = CriteriaSerializer(instance=criteria_to_update, data=data, partial=True) 
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
 
-        response = Response()
+    #     response = Response()
 
-        response.data = {
-            'message': 'Criteria Updated Succesfully',
-            'data': serializer.data
-        }
+    #     response.data = {
+    #         'message': 'Criteria Updated Succesfully',
+    #         'data': serializer.data
+    #     }
 
-        return response
+    #     return response
+
 

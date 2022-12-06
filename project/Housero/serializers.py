@@ -44,7 +44,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 class CriteriaSerializer(serializers.ModelSerializer):
-
+    user_id = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Criteria
         fields = '__all__'
