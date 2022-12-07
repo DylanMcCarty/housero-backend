@@ -15,7 +15,7 @@ class Criteria(models.Model):
     beds = models.PositiveIntegerField(default=0, null=False)
     baths = models.PositiveIntegerField(default=0)
     min_price = models.DecimalField(max_digits=9, decimal_places=0)
-    max_price = models.DecimalField(max_digits=9, decimal_places=0)
+    max_price = models.DecimalField(max_digits=9, decimal_places=0, null=True)
     sqft = models.PositiveIntegerField(default=0)
 
     def __str__(self):

@@ -48,3 +48,4 @@ class CriteriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Criteria
         fields = '__all__'
+        depth=1
