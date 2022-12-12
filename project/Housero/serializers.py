@@ -1,18 +1,8 @@
 # from django.contrib.auth.models import User, Group
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import CustomUser
-
-# class UserSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['url', 'username', 'email', 'groups']
-
-
-# class GroupSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Group
-#         fields = ['url', 'name']
+from .models import CustomUser, Criteria, LikedHouses
+from .fields import CustomUserListingField
 
 class UserSerializer(serializers.ModelSerializer):
     
@@ -32,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
         fields = ('email', 'username', 'password', 'first_name', 'last_name')
         extra_kwargs = {'password': {'write_only': True}}
+        depth=1
     
     def create(self, validated_data):
         password = validated_data.pop('password', None)
@@ -52,3 +43,20 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['first_name'] = user.first_name
         return token
+
+class CriteriaSerializer(serializers.ModelSerializer):
+    user_id = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+        model = Criteria
+        fields = '__all__'
+        depth=1
+
+class LikedHousesSerializer(serializers.ModelSerializer):
+
+    user_id = CustomUserListingField(many=False, queryset=CustomUser.objects.all(), required=True)
+
+    class Meta:
+        model = LikedHouses
+        fields = '__all__'
+        depth=1
+
