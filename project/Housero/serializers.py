@@ -1,7 +1,8 @@
 # from django.contrib.auth.models import User, Group
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .models import CustomUser, Criteria
+from .models import CustomUser, Criteria, LikedHouses
+from .fields import CustomUserListingField
 
 class UserSerializer(serializers.ModelSerializer):
     
@@ -49,3 +50,13 @@ class CriteriaSerializer(serializers.ModelSerializer):
         model = Criteria
         fields = '__all__'
         depth=1
+
+class LikedHousesSerializer(serializers.ModelSerializer):
+
+    user_id = CustomUserListingField(many=False, queryset=CustomUser.objects.all(), required=True)
+
+    class Meta:
+        model = LikedHouses
+        fields = '__all__'
+        depth=1
+
